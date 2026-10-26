@@ -246,17 +246,22 @@ const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
 export function Builder() {
   const [tab, setTab] = useState<Tab>('discord');
   useEffect(() => {
-    const fromHash = () => {
+    const fromHash = (scroll: boolean) => {
       const h = window.location.hash.slice(1) as Tab;
-      if (TABS.some((t) => t.id === h)) setTab(h);
+      if (!TABS.some((t) => t.id === h)) return;
+      setTab(h);
+      if (scroll) document.getElementById('builder')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
-    fromHash();
-    window.addEventListener('hashchange', fromHash);
-    return () => window.removeEventListener('hashchange', fromHash);
+    fromHash(false);
+    const onHash = () => fromHash(true);
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
   }, []);
   const pick = (t: Tab) => {
     setTab(t);
     history.replaceState(null, '', `#${t}`);
+    // keep the header's highlight in step without scrolling the page
+    window.dispatchEvent(new Event('hashchange-silent'));
   };
   return (
     <section id="builder">

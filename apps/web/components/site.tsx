@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { HeaderNav } from './HeaderNav';
 
 export const INVITE = 'https://discord.gg/NSEuXgsRbv';
 export const SITE = 'https://nekodb.space';
@@ -21,13 +22,7 @@ export function Header() {
     <header className="header">
       <div className="container">
         <Link href="/" className="brand"><Logo /> nekodb</Link>
-        <nav className="nav">
-          <Link href="/#discord">Discord</Link>
-          <Link href="/#spotify">Spotify</Link>
-          <Link href="/#languages">Languages</Link>
-          <Link href="/#counter">Counters</Link>
-          <Link href="/docs/">API</Link>
-        </nav>
+        <HeaderNav />
         <span className="spacer" />
         <a className="btn btn-primary" href={INVITE} target="_blank" rel="noreferrer">Join the Discord</a>
       </div>
@@ -39,11 +34,34 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="container">
-        <img src="/counter/nekodb-site.svg?scale=0.35" alt="Views of this page" height="35" />
-        <Link href="/docs/">API</Link>
-        <a href={INVITE} target="_blank" rel="noreferrer">Discord</a>
-        <span className="spacer" />
-        <span>Counter art from <a href="https://github.com/journey-ad/Moe-Counter" target="_blank" rel="noreferrer">Moe-Counter</a> (MIT). Not affiliated with Discord or Spotify.</span>
+        <div className="footer-top">
+          <div className="footer-brand">
+            <Link href="/" className="brand"><Logo /> nekodb</Link>
+            <p>Live widgets for GitHub profile READMEs. Free, no sign-up, open API.</p>
+            <img src="/counter/nekodb-site.svg?scale=0.45" alt="Views of this site" height="45" />
+          </div>
+          <div className="footer-col">
+            <h4>Widgets</h4>
+            <a href="/#discord">Discord card</a>
+            <a href="/#spotify">Spotify card</a>
+            <a href="/#languages">Languages</a>
+            <a href="/#counter">View counters</a>
+          </div>
+          <div className="footer-col">
+            <h4>Developers</h4>
+            <a href="/docs/">API reference</a>
+            <a href="/api/v1/status">Service status</a>
+            <a href="/api/v1/themes">Counter themes</a>
+          </div>
+          <div className="footer-col">
+            <h4>Community</h4>
+            <a href={INVITE} target="_blank" rel="noreferrer">Discord server</a>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>© 2026 NekoDB</span>
+          <span>Counter art from <a href="https://github.com/journey-ad/Moe-Counter" target="_blank" rel="noreferrer">Moe-Counter</a> (MIT). Not affiliated with Discord, Spotify or GitHub.</span>
+        </div>
       </div>
     </footer>
   );

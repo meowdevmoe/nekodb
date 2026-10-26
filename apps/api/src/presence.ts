@@ -147,7 +147,7 @@ export function toProfile(member: GuildMember, full: User | undefined): NekoProf
       avatar: user.avatar,
       avatar_url: avatarUrl(user),
       avatar_decoration_url: decoration,
-      banner_url: user.banner ? user.bannerURL({ size: 600, extension: 'png', forceStatic: true }) ?? null : null,
+      banner_url: user.banner ? user.bannerURL({ size: 1024, extension: 'png', forceStatic: true }) ?? null : null,
       accent_color: user.accentColor ?? null,
       public_flags: user.flags?.bitfield ?? 0,
       bot: user.bot,
