@@ -11,7 +11,8 @@ const themes = new Map<string, Theme>();
 export const DEFAULT_THEME = 'rule34';
 
 export async function loadThemes(dir: string): Promise<void> {
-  for (const name of fs.readdirSync(dir).sort()) {
+  // every sub-directory is a theme; files such as LICENSE sit next to them
+  for (const name of fs.readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name).sort()) {
     const files = fs.readdirSync(path.join(dir, name));
     const digits: Digit[] = [];
     for (let d = 0; d < 10; d++) {

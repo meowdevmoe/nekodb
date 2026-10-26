@@ -18,6 +18,7 @@ class DiscordWatcher extends EventEmitter {
   private profiles = new Map<string, { user: User; at: number }>();
 
   start() {
+    this.setMaxListeners(0); // one listener per open live stream
     void this.connect();
   }
 

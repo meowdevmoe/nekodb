@@ -3,6 +3,7 @@
 import { AlertIcon, CodeIcon, EyeIcon, InfoIcon, PersonIcon, PlayIcon } from '@primer/octicons-react';
 import { useEffect, useMemo, useState } from 'react';
 import { DEMO_ID, INVITE, SITE } from './site';
+import { LiveImage, useLivePresence } from './LiveImage';
 import { Snippet } from './Snippet';
 
 type Tab = 'discord' | 'spotify' | 'languages' | 'counter';
@@ -72,31 +73,13 @@ function Panel({ title, note, preview, snippet }: { title: string; note: string;
   );
 }
 
-/** Tells whether the bot can see this Discord account. */
+/** Tells whether the bot can see this Discord account, live from the presence stream. */
 function DiscordState({ id }: { id: string }) {
-  const [state, setState] = useState<'idle' | 'live' | 'missing' | 'down'>('idle');
-  const [status, setStatus] = useState('');
-  useEffect(() => {
-    if (!SNOWFLAKE.test(id)) return setState('idle');
-    let gone = false;
-    fetch(`/api/v1/users/${id}`)
-      .then(async (r) => {
-        if (gone) return;
-        if (r.ok) {
-          const j = await r.json();
-          setStatus(j.data?.discord_status ?? '');
-          setState('live');
-        } else setState(r.status === 404 ? 'missing' : 'down');
-      })
-      .catch(() => !gone && setState('down'));
-    return () => {
-      gone = true;
-    };
-  }, [id]);
-  if (state === 'live') return <div className="flash"><InfoIcon size={16} /><div>NekoDB sees this account right now ({status}). The card updates on every page view.</div></div>;
-  if (state === 'missing') return <div className="flash"><AlertIcon size={16} /><div>This account is not on the NekoDB Discord server yet. <a href={INVITE} target="_blank" rel="noreferrer">Join the server</a> and the card goes live within seconds.</div></div>;
-  if (state === 'down') return <div className="flash"><AlertIcon size={16} /><div>The NekoDB bot is reconnecting to Discord. Cards come back on their own.</div></div>;
-  return null;
+  const { data } = useLivePresence(SNOWFLAKE.test(id) ? id : null);
+  if (!data) return null;
+  if (data.success) return <div className="flash"><InfoIcon size={16} /><div>Live: NekoDB sees this account ({data.data?.discord_status ?? 'offline'}). The preview redraws the moment your status or track changes.</div></div>;
+  if (data.error?.code === 'user_not_monitored') return <div className="flash"><AlertIcon size={16} /><div>This account is not on the NekoDB Discord server yet. <a href={INVITE} target="_blank" rel="noreferrer">Join the server</a> and the card goes live within seconds.</div></div>;
+  return <div className="flash"><AlertIcon size={16} /><div>The NekoDB bot is reconnecting to Discord. Cards come back on their own.</div></div>;
 }
 
 function DiscordBuilder({ kind }: { kind: 'card' | 'spotify' }) {
@@ -136,7 +119,7 @@ function DiscordBuilder({ kind }: { kind: 'card' | 'spotify' }) {
       <Panel
         title={kind === 'card' ? 'Discord card' : 'Spotify card'}
         note={kind === 'card' ? 'status, game and track' : 'what you are listening to'}
-        preview={<Preview path={(s) => path(s)} scheme={scheme} alt={alt} />}
+        preview={<LiveImage id={valid ? did : DEMO_ID} src={path(undefined)} scheme={scheme} alt={alt} />}
         snippet={<Snippet {...code(path, alt, scheme)} />}
       />
     </div>

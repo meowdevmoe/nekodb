@@ -1,20 +1,24 @@
-import { CodeIcon, EyeIcon, PersonIcon, PlayIcon } from '@primer/octicons-react';
-import { INVITE } from './site';
+import { LiveImage } from './LiveImage';
+import { DEMO_ID, INVITE } from './site';
 
-const FEATURES = [
-  { icon: <PersonIcon size={20} />, title: 'Discord status card', text: 'Shows your avatar, online status, custom status, the game or app you have open and the Spotify track playing, straight from Discord. Join the NekoDB server once and the card follows you in real time.' },
-  { icon: <PlayIcon size={20} />, title: 'Spotify now playing', text: 'Cover art, track, artist and a progress bar for whatever you are listening to, read from your Discord presence. No Spotify login or token needed.' },
-  { icon: <CodeIcon size={20} />, title: 'Top languages', text: 'The share of each language across your public GitHub repositories, with GitHub’s own language colours. Forks are left out and you can hide languages you do not want shown.' },
-  { icon: <EyeIcon size={20} />, title: 'View counters', text: '42 anime and pixel-art counter themes from Moe-Counter. Pick a name, paste the image, and every visit to your profile adds one.' },
-];
+/** Theme-following live image, like the snippets the builder hands out. */
+function Live({ path, alt }: { path: string; alt: string }) {
+  const sep = path.includes('?') ? '&' : '?';
+  return (
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcSet={`${path}${sep}theme=dark`} />
+      <img src={`${path}${sep}theme=light`} alt={alt} loading="lazy" />
+    </picture>
+  );
+}
 
 export const FAQ = [
   { q: 'Is NekoDB free?', a: 'Yes. There is no sign-up, no limit on widgets and no paid plan. The API is open and needs no key.' },
-  { q: 'Why do I have to join the Discord server?', a: 'Discord only shares presence (status, games, Spotify) with bots that are in a server with you. The NekoDB bot watches members of its server and nothing else.' },
-  { q: 'How do I find my Discord user ID?', a: 'In Discord open Settings, Advanced and turn on Developer Mode. Then right-click your name anywhere and choose Copy User ID.' },
-  { q: 'Can I use it instead of Lanyard?', a: 'Yes. /api/v1/users/:id returns the same field names as Lanyard, so most Lanyard clients only need a different base URL.' },
-  { q: 'How fresh is the data?', a: 'Discord and Spotify cards are drawn on every request from the live presence. Language totals are refreshed every six hours. Images are sent with no-cache headers so GitHub fetches them again on each view.' },
-  { q: 'Does the image work on GitHub?', a: 'Yes. Every picture inside the SVG is embedded, so it renders through GitHub’s image proxy. The Auto theme uses a <picture> tag to follow the reader’s light or dark mode.' },
+  { q: 'Why join the Discord server?', a: 'Discord only shares presence (status, games, Spotify) with bots that are in a server with you. The NekoDB bot watches members of its own server and nothing else.' },
+  { q: 'Where is my Discord user ID?', a: 'In Discord open Settings, Advanced and turn on Developer Mode. Then right-click your name anywhere and choose Copy User ID.' },
+  { q: 'Can it replace Lanyard?', a: 'Yes. /api/v1/users/:id returns Lanyard’s field names, so most Lanyard clients only need a different base URL.' },
+  { q: 'How fresh is the data?', a: 'Discord and Spotify cards are drawn from your live presence on every request. Language totals refresh every six hours.' },
+  { q: 'Does it work on GitHub?', a: 'Yes. Every picture inside the SVG is embedded, so it passes GitHub’s image proxy, and the Auto theme follows the reader’s light or dark mode.' },
 ];
 
 export function About() {
@@ -28,7 +32,7 @@ export function About() {
       operatingSystem: 'Any',
       description: 'Live widgets for GitHub profile READMEs: Discord status, Spotify now playing, top languages and view counters.',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      featureList: FEATURES.map((f) => f.title),
+      featureList: ['Discord status card', 'Spotify now playing card', 'GitHub top languages', 'Anime view counters'],
       image: 'https://nekodb.space/og.png',
     },
     {
@@ -39,36 +43,44 @@ export function About() {
   ];
   return (
     <>
-      <section className="about" aria-labelledby="features">
-        <h2 id="features">What you can add to your README</h2>
-        <div className="features">
-          {FEATURES.map((f) => (
-            <article key={f.title} className="feature">
-              <span className="feature-icon">{f.icon}</span>
-              <h3>{f.title}</h3>
-              <p>{f.text}</p>
-            </article>
-          ))}
+      <section className="show" aria-labelledby="show-discord">
+        <p className="eyebrow">Discord</p>
+        <h2 id="show-discord">Your status, right in your README.</h2>
+        <p className="lede">Avatar, online status, custom status, the game or app you have open and the song on Spotify. <a href={INVITE} target="_blank" rel="noreferrer">Join the NekoDB server</a> once and the card follows you in real time.</p>
+        <div className="show-media"><LiveImage id={DEMO_ID} src={`/card/${DEMO_ID}.svg`} alt="A live NekoDB Discord card" /></div>
+      </section>
+      <section className="show" aria-labelledby="show-spotify">
+        <p className="eyebrow">Spotify</p>
+        <h2 id="show-spotify">Now playing, no Spotify login.</h2>
+        <p className="lede">Cover, track, artist and how far into the song you are, read from your Discord presence. Nothing to connect, no token to paste.</p>
+        <div className="show-media"><LiveImage id={DEMO_ID} src={`/spotify/${DEMO_ID}.svg`} alt="A live NekoDB Spotify card" /></div>
+      </section>
+      <section className="show" aria-labelledby="show-languages">
+        <p className="eyebrow">Languages</p>
+        <h2 id="show-languages">What you write, in GitHub’s colours.</h2>
+        <p className="lede">Every public repository you own, forks left out, summed by language. Hide the ones you would rather not show.</p>
+        <div className="show-media"><Live path="/github/meowdevmoe/languages.svg" alt="A NekoDB languages card" /></div>
+      </section>
+      <section className="show" aria-labelledby="show-counters">
+        <p className="eyebrow">View counters</p>
+        <h2 id="show-counters">A counter with some character.</h2>
+        <p className="lede">Forty-two anime and pixel-art themes from Moe-Counter. Pick a name, paste the image, and every visit adds one.</p>
+        <div className="show-media counters">
+          <img src="/counter-preview?theme=rule34&value=0004096" alt="rule34 counter theme" loading="lazy" />
+          <img src="/counter-preview?theme=gelbooru&value=0001337&scale=0.7" alt="gelbooru counter theme" loading="lazy" />
+          <img src="/counter-preview?theme=capoo-2&value=0000815&scale=0.6" alt="capoo counter theme" loading="lazy" />
         </div>
       </section>
-      <section className="about" aria-labelledby="how">
-        <h2 id="how">How it works</h2>
-        <ol className="steps">
-          <li><b>Join the <a href={INVITE} target="_blank" rel="noreferrer">NekoDB Discord server</a></b><span>Only needed for the Discord and Spotify cards. Counters and languages work without it.</span></li>
-          <li><b>Pick a widget above</b><span>Enter your Discord ID, GitHub username or a counter name and choose a theme.</span></li>
-          <li><b>Copy the code into your README</b><span>Markdown or HTML. The image stays live: no rebuilds, no GitHub Actions.</span></li>
-        </ol>
-      </section>
-      <section className="about" aria-labelledby="faq">
+      <section className="qa" aria-labelledby="faq">
         <h2 id="faq">Questions</h2>
-        <div className="faq">
+        <dl>
           {FAQ.map((f) => (
-            <details key={f.q}>
-              <summary>{f.q}</summary>
-              <p>{f.a}</p>
-            </details>
+            <div key={f.q}>
+              <dt>{f.q}</dt>
+              <dd>{f.a}</dd>
+            </div>
           ))}
-        </div>
+        </dl>
       </section>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </>

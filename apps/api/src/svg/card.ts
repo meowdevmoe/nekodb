@@ -36,11 +36,26 @@ function fact(x: number, y: number, w: number, value: string, label: string, p: 
   return `<text x="${x}" y="${y}" fill="${color ?? p.fg}" font-size="${size}" font-weight="600">${esc(fit(value, size, w))}</text><text x="${x}" y="${y + 20}" fill="${p.muted}" font-size="13">${esc(fit(label, 13, w))}</text>`;
 }
 
+/** Track progress that keeps playing: the bar fills to the end and the elapsed time ticks
+ *  every second (SMIL, which also runs inside <img>, so it works through GitHub's proxy). */
 function bar(x: number, y: number, w: number, start: number, end: number, p: Palette): string {
   const total = Math.max(1, end - start);
   const done = Math.min(total, Math.max(0, Date.now() - start));
-  return `<rect x="${x}" y="${y}" width="${w}" height="8" rx="4" fill="${p.subtle}"/><rect x="${x}" y="${y}" width="${Math.max(8, (done / total) * w)}" height="8" rx="4" fill="${SPOTIFY_GREEN}"/>
-<text x="${x}" y="${y + 24}" fill="${p.muted}" font-size="11">${duration(done)}</text><text x="${x + w}" y="${y + 24}" fill="${p.muted}" font-size="11" text-anchor="end">${duration(total)}</text>`;
+  const fill = Math.max(8, (done / total) * w);
+  const left = (total - done) / 1000;
+  const fillAnim = left > 0.5 ? `<animate attributeName="width" from="${fill}" to="${w}" dur="${left.toFixed(1)}s" fill="freeze"/>` : '';
+  // one text per remaining second, each shown for exactly one second; the last one stays
+  const first = Math.floor(done / 1000);
+  const last = Math.min(Math.floor(total / 1000), first + 900);
+  const ticks: string[] = [];
+  for (let s = first; s <= last; s++) {
+    const t = s - first;
+    const final = s === last;
+    const show = t === 0 && final ? '' : t === 0 ? `<set attributeName="visibility" to="hidden" begin="1s" fill="freeze"/>` : `<set attributeName="visibility" to="visible" begin="${t}s" ${final ? 'fill="freeze"' : 'dur="1s"'}/>`;
+    ticks.push(`<text x="${x}" y="${y + 24}"${t === 0 ? '' : ' visibility="hidden"'}>${duration(s * 1000)}${show}</text>`);
+  }
+  return `<rect x="${x}" y="${y}" width="${w}" height="8" rx="4" fill="${p.subtle}"/><rect x="${x}" y="${y}" width="${fill}" height="8" rx="4" fill="${SPOTIFY_GREEN}">${fillAnim}</rect>
+<g fill="${p.muted}" font-size="11">${ticks.join('')}</g><text x="${x + w}" y="${y + 24}" fill="${p.muted}" font-size="11" text-anchor="end">${duration(total)}</text>`;
 }
 
 const VERBS: Record<number, string> = { 0: 'playing', 1: 'streaming', 2: 'listening to', 3: 'watching', 5: 'competing in' };

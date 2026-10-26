@@ -130,6 +130,40 @@ async function main() {
   );
 
 
+
+  // Live presence stream (Server-Sent Events): a "presence" event right away and on every change.
+  app.get<{ Params: { id: string } }>('/api/v1/stream/:id', (req, reply) => {
+    const id = req.params.id;
+    if (!SNOWFLAKE.test(id)) return reply.code(400).send({ success: false, error: { code: 'invalid_id' } });
+    reply.hijack();
+    const res = reply.raw;
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream; charset=utf-8',
+      'Cache-Control': 'no-cache, no-transform',
+      Connection: 'keep-alive',
+      'X-Accel-Buffering': 'no',
+      'Access-Control-Allow-Origin': '*',
+    });
+    let last = '';
+    const send = async () => {
+      const member = discord.state === 'ready' ? discord.member(id) : undefined;
+      const body = JSON.stringify(member ? { success: true, data: toProfile(member, await discord.profile(id)) } : { success: false, error: { code: discord.state === 'ready' ? 'user_not_monitored' : 'gateway_unavailable' } });
+      if (body === last) return; // presence updates that change nothing visible are skipped
+      last = body;
+      res.write(`event: presence\ndata: ${body}\n\n`);
+    };
+    void send();
+    const onPresence = (uid: string) => {
+      if (uid === id) void send();
+    };
+    discord.on('presence', onPresence);
+    const ping = setInterval(() => res.write(': ping\n\n'), 25_000);
+    req.raw.on('close', () => {
+      clearInterval(ping);
+      discord.off('presence', onPresence);
+    });
+  });
+
   // GitHub top languages for any user: /github/:login/languages.svg (?theme, count, exclude, title)
   app.get<{ Params: { login: string; kind: string }; Querystring: Query }>('/github/:login/:kind', async (req, reply) => {
     const login = req.params.login;

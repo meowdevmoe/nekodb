@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { HeaderNav } from './HeaderNav';
 
-export const INVITE = 'https://discord.gg/TjGfUHPeWW';
-export const SITE = 'https://nekodb.space';
-export const DEMO_ID = '1162826529768755283';
+// Self-hosters set these at build time (NEXT_PUBLIC_*); the defaults are nekodb.space's own.
+export const INVITE = process.env.NEXT_PUBLIC_DISCORD_INVITE ?? 'https://discord.gg/TjGfUHPeWW';
+export const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nekodb.space';
+export const DEMO_ID = process.env.NEXT_PUBLIC_DEMO_DISCORD_ID ?? '1162826529768755283';
 
 /** The NekoDB mark: a cat head drawn on the 16px Octicons grid. */
 /** The NekoDB mark (variant D): a database cylinder with cat ears, on the 16px Octicons grid. */

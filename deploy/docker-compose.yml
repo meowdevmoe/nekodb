@@ -1,0 +1,17 @@
+# Example deployment of the API. Put secrets in .env next to this file (see ../.env.example).
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    image: nekodb-api:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: "3741"
+      DB_PATH: /data/nekodb.sqlite
+    volumes:
+      - ./data:/data
+    ports:
+      - "127.0.0.1:3741:3741"
+    mem_limit: 512m
