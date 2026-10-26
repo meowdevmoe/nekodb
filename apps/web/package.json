@@ -1,0 +1,21 @@
+{
+  "name": "@nekodb/web",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 4310",
+    "build": "next build",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@primer/octicons-react": "^19.15.0",
+    "next": "^16.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "^5.9.0"
+  }
+}
