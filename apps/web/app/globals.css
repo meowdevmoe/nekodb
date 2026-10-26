@@ -162,3 +162,24 @@ img { max-width: 100%; }
 .tabs { scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
 #builder { scroll-margin-top: 16px; }
+
+/* about, how it works, FAQ */
+.about { margin-top: 56px; }
+.about h2 { font-size: 24px; font-weight: 600; margin: 0 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.feature { padding: 16px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); }
+.feature-icon { display: inline-flex; width: 36px; height: 36px; align-items: center; justify-content: center; border-radius: 6px; background: var(--bg-subtle); border: 1px solid var(--border); color: var(--fg-muted); }
+.feature h3 { margin: 12px 0 6px; font-size: 16px; font-weight: 600; }
+.feature p { margin: 0; color: var(--fg-muted); }
+.steps { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.steps li { counter-increment: step; position: relative; padding: 16px 16px 16px 56px; border: 1px solid var(--border); border-radius: 6px; }
+.steps li::before { content: counter(step); position: absolute; left: 16px; top: 16px; width: 26px; height: 26px; border-radius: 50%; background: var(--bg-subtle); border: 1px solid var(--border); display: grid; place-items: center; font-weight: 600; font-size: 13px; }
+.steps b { display: block; font-weight: 600; margin-bottom: 4px; }
+.steps span { color: var(--fg-muted); }
+.faq { border: 1px solid var(--border); border-radius: 6px; }
+.faq details + details { border-top: 1px solid var(--border); }
+.faq summary { padding: 14px 16px; cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; color: var(--fg-muted); font-weight: 400; }
+.faq details[open] summary::after { content: '−'; }
+.faq details p { margin: 0; padding: 0 16px 16px; color: var(--fg-muted); max-width: 760px; }

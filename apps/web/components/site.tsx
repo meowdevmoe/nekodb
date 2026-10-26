@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { HeaderNav } from './HeaderNav';
 
-export const INVITE = 'https://discord.gg/NSEuXgsRbv';
+export const INVITE = 'https://discord.gg/TjGfUHPeWW';
 export const SITE = 'https://nekodb.space';
 export const DEMO_ID = '1162826529768755283';
 

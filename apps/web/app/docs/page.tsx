@@ -1,7 +1,12 @@
 import type { Metadata } from 'next';
 import { Footer, Header, INVITE } from '@/components/site';
 
-export const metadata: Metadata = { title: 'API reference', description: 'NekoDB endpoints: Discord presence JSON, SVG cards, languages and view counters.' };
+export const metadata: Metadata = {
+  title: 'API reference',
+  description: 'NekoDB API: Discord presence JSON (Lanyard-compatible), SVG Discord and Spotify cards, GitHub top languages and view counters. No key needed.',
+  alternates: { canonical: '/docs/' },
+  openGraph: { url: '/docs/', title: 'NekoDB API reference', images: [{ url: '/og.png', width: 1200, height: 630 }] },
+};
 
 const USER_JSON = `{
   "success": true,

@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400;500;600;700&display=block">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1200px;height:630px;overflow:hidden;background:#0d1117}
+body{position:relative;font-family:'Mona Sans',sans-serif;color:#f0f6fc;-webkit-font-smoothing:antialiased}
+.dots{position:absolute;inset:0;background-image:radial-gradient(#3d444d66 1px,transparent 1px);background-size:22px 22px;mask-image:linear-gradient(90deg,transparent 0%,#000 55%)}
+.left{position:absolute;left:64px;top:60px;width:520px}
+.brand{display:flex;align-items:center;gap:12px;font-size:30px;font-weight:600;letter-spacing:-.01em}
+.brand svg{width:40px;height:40px}
+h1{margin-top:92px;font-size:60px;line-height:1.04;font-weight:700;letter-spacing:-.035em}
+p{margin-top:22px;font-size:23px;line-height:1.45;color:#9198a1;width:470px}
+.url{position:absolute;left:64px;bottom:56px;font-size:20px;font-weight:500;color:#9198a1}
+.url b{color:#f0f6fc;font-weight:600}
+.w{position:absolute;display:block;border-radius:6px;box-shadow:0 24px 60px rgba(1,4,9,.75),0 0 0 1px rgba(240,246,252,.06)}
+.card{left:610px;top:96px;width:740px}
+.langs{left:660px;top:330px;width:740px}
+.counter{position:absolute;left:640px;top:470px;height:110px;image-rendering:pixelated;filter:drop-shadow(0 12px 24px rgba(1,4,9,.7))}
+</style></head><body>
+<div class="dots"></div>
+<div class="left">
+  <div class="brand"><svg viewBox="0 0 16 16" fill="none" stroke="#f0f6fc" stroke-width="1.5"><path d="M3.05 5.6 3.75 1.25l2.9 3.05M12.95 5.6l-.7-4.35-2.9 3.05" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="8" cy="6.3" rx="5.25" ry="2"/><path d="M2.75 6.3v6.15c0 1.1 2.35 2 5.25 2s5.25-.9 5.25-2V6.3M2.75 9.4c0 1.1 2.35 2 5.25 2s5.25-.9 5.25-2"/></svg>nekodb</div>
+  <h1>Live widgets for your GitHub README</h1>
+  <p>Discord status, Spotify, top languages and view counters. Free, no sign-up.</p>
+</div>
+<div class="url"><b>nekodb.space</b></div>
+<img class="w card" src="card.svg">
+<img class="w langs" src="langs.svg">
+<img class="counter" src="counter.svg">
+</body></html>

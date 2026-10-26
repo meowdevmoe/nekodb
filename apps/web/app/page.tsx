@@ -1,3 +1,4 @@
+import { About } from '@/components/About';
 import { Builder } from '@/components/Builder';
 import { Footer, Header, INVITE } from '@/components/site';
 
@@ -15,6 +16,7 @@ export default function Home() {
           </div>
         </section>
         <Builder />
+        <About />
       </main>
       <Footer />
     </>
